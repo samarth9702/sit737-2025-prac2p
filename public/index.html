@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <div>
+        <h1>Multiplication Calc</h1>
+        <input type="number" id="num1" placeholder="Enter first num">
+        <input type="number" id="num2" placeholder="Enter second num">
+        <button onclick="calculateMultiplication()">Calculate Product</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        async function calculateMultiplication() {
+            const num1 = document.getElementById('num1').value;
+            const num2 = document.getElementById('num2').value;
+
+            if (!num1 || !num2) {
+                alert('Please enter both num\'s');
+                return;
+            }
+
+            const response = await fetch('/calculate-mul', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ num1, num2 }),
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = `The mul is: ${data.mul}`;
+        }
+    </script>
+</body>
+</html>
